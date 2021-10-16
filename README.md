@@ -1,7 +1,7 @@
 [![forthebadge](https://forthebadge.com/images/badges/as-seen-on-tv.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/powered-by-black-magic.svg)](https://forthebadge.com)
 <img align="left" width="170" height="35" src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white">
 
-# Crypto-Case-Study
+# Crypto Case Study
 > A SQL Case Study performed on Daily BTC data available on the [Serious SQL](https://www.datawithdanny.com) course by Danny Ma.
 
 [![star-useful](https://img.shields.io/badge/🌟-If%20useful-red.svg)](https://shields.io) 
