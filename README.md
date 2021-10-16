@@ -101,7 +101,7 @@ FROM cte;
 |---|---|
 |79|3%|
 
-### Q5: What percentage of days have a higher close_price than open_price?
+### Q5: What percentage of days have a higher `close_price` than `open_price`?
 
 ```sql
 
@@ -122,7 +122,7 @@ SELECT good_days, ROUND(100.0 * good_days / total_days) AS percentage FROM cte;
 
 > 💡 Point To Remember: Remember integer floor dvision!
 
-### Q6: What was the largest difference between high_price and low_price and which date did it occur? 
+### Q6: What was the largest difference between <code>high_price</code> and <code>low_price</code> and which date did it occur? 
 
 ```sql
 select (high_price - low_price) AS difference, market_date from trading.daily_btc ORDER BY difference DESC NULLS LAST LIMIT 1;
