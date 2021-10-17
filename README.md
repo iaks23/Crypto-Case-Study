@@ -13,11 +13,35 @@
 * [🔭 Dataset Exploration](#explore)
 * [🧼 Data Cleaning](#clean)
 * [📊 Business Problem Solutions](#solutions)
+-------------------
 
+# 🔭 Dataset Exploration <a name='explore'></a>
 
+The `daily_btc` table consists of 7 rows giving us a detailed view of BTC value in the market. 
 
+```
+SELECT *
+FROM trading.daily_btc
+LIMIT 3;
+```
 
+|market_date|	open_price|	high_price|	low_price|	close_price|	adjusted_close_price|	volume|
+|---|---|---|---|---|---|---|
+|2014-09-17|	465.864014|	468.174011|	452.421997|	457.334015|	457.334015|	21056800|
+|2014-09-18|	456.859985|	456.859985|	413.104004|	424.440002|	424.440002|	34483200|
+|2014-09-19|	424.102997|	427.834991|	384.532013|	394.795990|	394.795990|	37919700|
 
+> Understanding the structure and the meaning behind it.
+
+|Column Name| Description|
+|---|---|
+|market_date|	Cryptocurrency markets trade daily with no holidays|
+|open_price|	$ USD price at the beginning of the day|
+|high_price|	Intra-day highest sell price in $ USD|
+|low_price|	Intra-day lowest sell price in $ USD|
+|close_price|	$ USD price at the end of the day|
+|adjusted_close_price|	$ USD price after splits and dividend distributions|
+|volume|	The daily amount of traded units of cryptocurrency|
 
 
 # 📊 Business Problem Solutions <a name='solutions'></a>
