@@ -44,6 +44,89 @@ LIMIT 3;
 |volume|	The daily amount of traded units of cryptocurrency|
 
 
+# 🧼 Data Cleaning <a name='clean'></a>
+
+### Identifying Null Rows
+
+A simple query to perform in order to retrieve all null value columns from the data is, 
+
+```sql
+SELECT *
+FROM trading.daily_btc
+WHERE
+  market_date IS NULL
+  OR open_price IS NULL
+  OR high_price IS NULL
+  OR low_price IS NULL
+  OR close_price IS NULL
+  OR adjusted_close_price IS NULL
+  OR volume IS NULL
+);
+```
+
+### Updating Null Rows
+
+ `LAG` and `LEAD` both can be used to simultaenously fill out the null values in a table, replacing null with the previous record. 
+ 
+ Using `LAG` in combination with `COALESCE` we can create an updated version of the `daily_btc` table that would help us solve the business queries. 
+ 
+ ```SQL
+DROP TABLE IF EXISTS updated_daily_btc;
+CREATE TEMP TABLE updated_daily_btc AS
+SELECT
+  market_date,
+  COALESCE(
+    open_price,
+    LAG(open_price, 1) OVER w,
+    LAG(open_price, 2) OVER w
+  ) AS open_price,
+  COALESCE(
+    high_price,
+    LAG(high_price, 1) OVER w,
+    LAG(high_price, 2) OVER w
+  ) AS high_price,
+  COALESCE(
+    low_price,
+    LAG(low_price, 1) OVER w,
+    LAG(low_price, 2) OVER w
+  ) AS low_price,
+  COALESCE(
+    close_price,
+    LAG(close_price, 1) OVER w,
+    LAG(close_price, 2) OVER w
+  ) AS close_price,
+  COALESCE(
+    adjusted_close_price,
+    LAG(adjusted_close_price, 1) OVER w,
+    LAG(adjusted_close_price, 2) OVER w
+  ) AS adjusted_close_price,
+  COALESCE(
+    volume,
+    LAG(volume, 1) OVER w,
+    LAG(volume, 2) OVER w
+  ) AS volume
+FROM trading.daily_btc
+-- NOTE: checkout the syntax where I've included an unused window below!
+WINDOW
+  w AS (ORDER BY market_date),
+  unused_window AS (ORDER BY market_date DESC);
+
+-- inspect a few rows of the updated dataset for October
+SELECT *
+FROM updated_daily_btc
+WHERE market_date BETWEEN '2020-10-08'::DATE AND '2020-10-13'::DATE;
+```
+|market_date|	open_price|	high_price|	low_price|	close_price|	adjusted_close_price|	volume|
+|---|---|---|---|---|---|---|
+|2020-10-08|	10677.625000|	10939.799805|	10569.823242|	10923.627930|	10923.627930|	21,962,121,001|
+|2020-10-09|	10677.625000|	10939.799805|	10569.823242|	10923.627930|	10923.627930|	21,962,121,001|
+|2020-10-10|	11059.142578|	11442.210938|	11056.940430|	11296.361328|	11296.361328|	22,877,978,588|
+|2020-10-11|	11296.082031|	11428.813477|	11288.627930|	11384.181641|	11384.181641|	19,968,627,060|
+|2020-10-12|	11296.082031|	11428.813477|	11288.627930|	11384.181641|	11384.181641|	19,968,627,060|
+|2020-10-13|	11296.082031|	11428.813477| 11288.627930|	11384.181641|	11384.181641|	19,968,627,060|
+
+
+
 # 📊 Business Problem Solutions <a name='solutions'></a>
 
 ### Q1: What is the earliest & latest <code>market_date</code> value? 
